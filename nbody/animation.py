@@ -9,8 +9,6 @@ from .n_body import *
 animation_space_index_step = 30  # choose every 10th for animation
 
 if __name__ == "__main__":
-    plt.style.use("dark_background")
-
     # Initialize three bodies: Earth, Sun, and a third body
     earth = Body(m=1, r_0=(1, 0), v_0=(0, np.sqrt(333000)), name="earth")
     sun = Body(m=333000, r_0=(0, 0), v_0=(0, 0), name="sun")
@@ -40,6 +38,13 @@ if __name__ == "__main__":
     positions = sol[:, : 2 * num_bodies]
 
     # Plot the trajectories of each body
+    plt.figure()
+    """for i, body in enumerate(system.bodies):
+        x = positions[:, 2 * i]
+        y = positions[:, 2 * i + 1]
+        plt.plot(x, y, label=body.name)
+    """
+
     x1 = positions[:, 0]
     y1 = positions[:, 1]
     x2 = positions[:, 2]
@@ -60,47 +65,20 @@ if __name__ == "__main__":
     plt.show()"""
 
     fig, ax = plt.subplots()
-    ax.set_xlim(-2, 2)
-    ax.set_ylim(-2, 2)
-    plt.grid(True, lw=0.3)
+    ax.set_xlim(-5, 5)
+    ax.set_ylim(-5, 5)
 
-    (animated_plot_l1,) = ax.plot([], [])
-    (animated_plot_p1,) = ax.plot([], [], "yellow", markersize=1)
-    (animated_plot_l2,) = ax.plot([], [])
-    (animated_plot_l3,) = ax.plot([], [])
+    (animated_plot,) = ax.plot([], [])
 
-    print(animated_plot_l1)
+    print(animated_plot)
 
     def animate(i):
-        # plot lines
-        animated_plot_l1.set_data(
+        animated_plot.set_data(
             x1[0 : i * animation_space_index_step],
             y1[0 : i * animation_space_index_step],
         )
-        animated_plot_p1.set_data(
-            x1[i * animation_space_index_step : i * animation_space_index_step],
-            y1[i * animation_space_index_step : i * animation_space_index_step],
-        )
-        animated_plot_l2.set_data(
-            x2[0 : i * animation_space_index_step],
-            y2[0 : i * animation_space_index_step],
-        )
-        animated_plot_l3.set_data(
-            x3[0 : i * animation_space_index_step],
-            y3[0 : i * animation_space_index_step],
-        )
-        """animated_plot.set_data(
-            x1[i * animation_space_index_step], y1[i * animation_space_index_step]
-        )
-        animated_plot.set_data(
-            x2[0 : i * animation_space_index_step],
-            y2[0 : i * animation_space_index_step],
-        )
-        animated_plot.set_data(
-            x2[i * animation_space_index_step], y2[i * animation_space_index_step]
-        )"""
 
-        return animated_plot_l1, animated_plot_l2, animated_plot_l3, animated_plot_p1
+        return (animated_plot,)
 
     animation = FuncAnimation(
         fig,

@@ -2,8 +2,7 @@ import numpy as np
 from scipy.integrate import odeint
 from typing import List, Dict, Tuple, Self, Any
 from itertools import chain, combinations
-
-G = 1  # Gravitational constant
+from .constants import epsilon, G
 
 
 class Body:
@@ -80,7 +79,7 @@ class System:
                 if i != j:
                     r = positions[j] - positions[i]
                     distance = np.linalg.norm(r)
-                    if distance < 1e-6:
+                    if distance < epsilon:
                         continue
                     acc = G * body2.m * r / distance**3
                     accelerations[i] += acc
