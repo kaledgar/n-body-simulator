@@ -26,10 +26,11 @@ class Body:
 
 
 class System:
-    def __init__(self, *bodies: Body) -> None:
+    def __init__(self, *bodies: Body, name: str = "System") -> None:
         self.bodies: List[Body] = list(bodies)
         self.bodies_dict: Dict[str, Body] = {body.name: body for body in bodies}
         self.interactions = self.calculate_interactions()
+        self.name = name
 
     def prepare_initial_data(self) -> Dict[str, Any]:
         """Prepare initial positions and velocities for all bodies."""
