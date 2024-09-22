@@ -9,7 +9,7 @@ from .constants import animation_index_multiplier
 from .initial_conditions import yin_yang_1a, earth_sun_system
 
 
-def get_positions_from_solution(solution_arr: np.ndarray) -> np.ndarray:
+def get_positions_from_solution(solution_arr: np.ndarray) -> Tuple[np.ndarray, int]:
     """
     Extracts array with positions from the solution_array.
     solution_arr should be np.ndarray of shape: (number_of_time_points, 4*n),
@@ -36,12 +36,20 @@ def get_positions_from_solution(solution_arr: np.ndarray) -> np.ndarray:
     assert solution_arr.shape[1] % 2 == 0
     body_count: int = int(sol.shape[1] / 4)
     print(f"Ok, body_cout = {body_count}")
-    return solution_arr[:, : 2 * body_count]
+    return solution_arr[:, : 2 * body_count], body_count
+
+
+def prepare_animation_from_solution_arr(solution_arr: np.ndarray) -> None:
+    """Responsible for generating animation"""
+    solution_arr, n = get_positions_from_solution(solution_arr)
+    print(f"solution_arr = {solution_arr.shape}, n = {n}")
+
+    animated_plots_list: List[Tuple] = [(ax.plot([], []),) for _ in range(n)]
+    return solution_arr, n
 
 
 if __name__ == "__main__":
     plt.style.use("dark_background")
-    n = 3
 
     # Time points for solving the differential equations
     t_min = 0
@@ -52,7 +60,7 @@ if __name__ == "__main__":
 
     # Solve the system's ODE
     sol = yin_yang_1a.solve(t)
-    positions = get_positions_from_solution(sol)
+    positions, n = get_positions_from_solution(sol)
 
     # Plot the trajectories of each body
     x1 = positions[:, 0]
@@ -70,7 +78,8 @@ if __name__ == "__main__":
     plt.grid(True, lw=0.3)
 
     animated_plots_list: List[Tuple] = [(ax.plot([], []),) for _ in range(n)]
-
+    for i, plot_tuple in enumerate(animated_plots_list):
+        print(f"i={i}, plot_tuple={plot_tuple[0]}, type = {type(plot_tuple)}")
     print(f"animated_plots_list = {animated_plots_list}")
 
     (animated_plot_l1,) = ax.plot([], [])
@@ -80,8 +89,21 @@ if __name__ == "__main__":
     print(animated_plot_l1)
 
     def automatic_animation(i):
-        for plot_tuple in animated_plots_list:
-            pass
+        # Prepare Line2D objects
+        print(f"Message from automatic_animation: ")
+        animation_list = []
+        for i, plot_tuple in enumerate(animated_plots_list):
+            print(f"i = {i}, plot_tuple[0][0] = {plot_tuple[0][0]}")
+            animation_object = plot_tuple[0][0].set_data(
+                positions[:, 2 * i][0 : i * animation_index_multiplier],
+                positions[:, 2 * i + 1][0 : i * animation_index_multiplier],
+            )
+            animation_list.append(animation_object)
+
+        print(animation_list)
+        return animation_list
+
+    automatic_animation(1)
 
     def animate(i):
         # plot lines
