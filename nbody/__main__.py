@@ -90,20 +90,18 @@ if __name__ == "__main__":
 
     def automatic_animation(i):
         # Prepare Line2D objects
-        print(f"Message from automatic_animation: ")
+        # print(f"Message from automatic_animation: ")
         animation_list = []
-        for i, plot_tuple in enumerate(animated_plots_list):
-            print(f"i = {i}, plot_tuple[0][0] = {plot_tuple[0][0]}")
+        for j, plot_tuple in enumerate(animated_plots_list):
+            # print(f"j = {j}, plot_tuple[0][0] = {plot_tuple[0][0]}")
             animation_object = plot_tuple[0][0].set_data(
-                positions[:, 2 * i][0 : i * animation_index_multiplier],
-                positions[:, 2 * i + 1][0 : i * animation_index_multiplier],
+                positions[:, 2 * j][0 : j * animation_index_multiplier],
+                positions[:, 2 * j + 1][0 : j * animation_index_multiplier],
             )
             animation_list.append(animation_object)
 
-        print(animation_list)
+        # print(animation_list)
         return animation_list
-
-    automatic_animation(1)
 
     def animate(i):
         # plot lines
@@ -129,7 +127,7 @@ if __name__ == "__main__":
         animated_plot.set_data(
             x2[i * animation_index_multiplier], y2[i * animation_index_multiplier]
         )"""
-
+        # print(animated_plot_l1, animated_plot_l2, animated_plot_l3)
         return animated_plot_l1, animated_plot_l2, animated_plot_l3
 
     animation = FuncAnimation(

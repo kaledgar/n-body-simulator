@@ -13,6 +13,7 @@ class Body:
         v_0: Tuple[float, float],
         name: str = "body",
     ) -> None:
+        """Constructor for Body object."""
         self.m = m  # Mass of the body
         self.r_0 = r_0  # Initial position (x, y)
         self.v_0 = v_0  # Initial velocity (vx, vy)
